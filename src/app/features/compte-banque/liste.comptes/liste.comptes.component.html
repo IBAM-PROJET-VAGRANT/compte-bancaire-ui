@@ -1,0 +1,62 @@
+<div class="card mt-3">
+  <div class="card-header">
+      <h2>Liste des comptes</h2>
+  </div>
+  <div class="card-body">
+    <button type="button" class="btn btn-primary btn-sm float-end mb-3" routerLink="/admin/clients/nouveau"><i class="bi bi-plus"></i> Nouveau compte</button>
+    <ng-container *ngIf="comptes | async as listeCompte; else failureOrLading">
+      <div *ngIf="searchCompteFormGroup">
+        <form [formGroup]="searchCompteFormGroup" (ngSubmit)="searchComptes()" autocomplete="off">
+          <div class="input-group mb-3">
+            <label for="search-term" class="input-group-text"> Mot clé:</label>
+            <input id="search-term" type="text" formControlName="searchTerm" class="form-control" placeholder="Rechercher par : N° compte | Client">
+            <button class="btn btn-info">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="table-response">
+        <table class="table table-sm table-stripped table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Client</th>
+              <th>N° compte</th>
+              <th>Date création</th>
+              <th>Solde</th>
+              <th>Découvert</th>
+              <th>Taux interêt</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let compte of comptes | async; index as idx">
+              <td>{{idx +1 }}</td>
+              <td>{{ compte.clientDTO.nom + " " + compte.clientDTO.prenom + " - " + compte.clientDTO.telephone }}</td>
+              <td>{{ compte.numero }}</td>
+              <td>{{ compte.dateCreation }}</td>
+              <td>{{ compte.solde }}</td>
+              <td>{{ compte.type == "CC" ? compte.decouvert : "NA" }}</td>
+              <td>{{ compte.type == "CE" ? compte.tauxInteret + "%" : "NA" }}</td>
+              <td>
+                <button type="button" class="btn btn-info btn-sm me-2" (click)="onShowCompteDetails(compte)">Voir détails</button>
+                <button type="button" class="btn btn-primary btn-sm me-2" (click)="onEditCompte(compte)">Modifier</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-template #failureOrLading>
+      <ng-container *ngIf="errorMsg; else loading">
+        <div class="text-danger">
+          {{errorMsg}}
+        </div>
+      </ng-container>
+      <ng-template #loading>
+        Chargement .....
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

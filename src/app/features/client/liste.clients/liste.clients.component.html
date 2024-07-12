@@ -1,0 +1,60 @@
+<div class="card mt-3">
+  <div class="card-header">
+      <h2>Liste des clients</h2>
+  </div>
+  <div class="card-body">
+    <button type="button" class="btn btn-primary btn-sm float-end mb-3" routerLink="/admin/clients/nouveau"><i class="bi bi-plus"></i> Nouveau client</button>
+    <ng-container *ngIf="clients | async as listCustomers; else failureOrLading">
+      <div *ngIf="searchClientFormGroup">
+        <form [formGroup]="searchClientFormGroup" (ngSubmit)="searchClients()" autocomplete="off">
+          <div class="input-group mb-3">
+            <label for="search-term" class="input-group-text"> Mot clé:</label>
+            <input id="search-term" type="text" formControlName="searchTerm" class="form-control" placeholder="Rechercher par : Nom | Prénom | Adresse email | N° de téléphone">
+            <button class="btn btn-info">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="table-response">
+        <table class="table table-sm table-stripped table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>N° téléphone</th>
+              <th>Adresse email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let client of clients | async; index as idx">
+              <td>{{idx +1 }}</td>
+              <td>{{ client.nom }}</td>
+              <td>{{ client.prenom }}</td>
+              <td>{{ client.telephone }}</td>
+              <td>{{ client.email }}</td>
+              <td>
+                <button type="button" class="btn btn-info btn-sm me-2" (click)="onShowCompteForm(client)">Créer compte</button>
+                <button type="button" class="btn btn-primary btn-sm me-2" (click)="onEditClient(client)">Modifier</button>
+                <button type="button" class="btn btn-danger btn-sm me-2"
+                  (click)="onConfirmDelete(client.idClient)">Supprimer</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-template #failureOrLading>
+      <ng-container *ngIf="errorMsg; else loading">
+        <div class="text-danger">
+          {{errorMsg}}
+        </div>
+      </ng-container>
+      <ng-template #loading>
+        Chargement .....
+      </ng-template>
+    </ng-template>
+  </div>
+</div>
