@@ -3,7 +3,7 @@
       <h2>Liste des comptes</h2>
   </div>
   <div class="card-body">
-    <button type="button" class="btn btn-primary btn-sm float-end mb-3" routerLink="/admin/clients/nouveau"><i class="bi bi-plus"></i> Nouveau compte</button>
+<!--    <button type="button" class="btn btn-primary btn-sm float-end mb-3" routerLink="/admin/comptes/nouveau"><i class="bi bi-plus"></i> Nouveau compte</button>-->
     <ng-container *ngIf="comptes | async as listeCompte; else failureOrLading">
       <div *ngIf="searchCompteFormGroup">
         <form [formGroup]="searchCompteFormGroup" (ngSubmit)="searchComptes()" autocomplete="off">
@@ -35,8 +35,8 @@
               <td>{{idx +1 }}</td>
               <td>{{ compte.clientDTO.nom + " " + compte.clientDTO.prenom + " - " + compte.clientDTO.telephone }}</td>
               <td>{{ compte.numero }}</td>
-              <td>{{ compte.dateCreation }}</td>
-              <td>{{ compte.solde }}</td>
+              <td>{{ compte.dateCreation | date : 'dd-MM-yyyy:HH-mm-ss' }}</td>
+              <td>{{ compte.solde | number: '1.2-2' }}</td>
               <td>{{ compte.type == "CC" ? compte.decouvert : "NA" }}</td>
               <td>{{ compte.type == "CE" ? compte.tauxInteret + "%" : "NA" }}</td>
               <td>

@@ -25,11 +25,19 @@ export class CompteService {
   }
 
   create(compte: ICompte): Observable<ICompte> {
-    return this.httpClient.post<ICompte>(`${this.API_BASE_URL}/comptes`, compte);
+    let pathSuf = "compte-courant"
+    if(compte.type == "CE") {
+      pathSuf = "compte-epargne";
+    }
+    return this.httpClient.post<ICompte>(`${this.API_BASE_URL}/comptes/${pathSuf}`, compte);
   }
 
   update(compte: ICompte): Observable<ICompte> {
-    return this.httpClient.put<ICompte>(`${this.API_BASE_URL}/comptes/${compte.idCompteBanque}`, compte);
+    let pathSuf = "compte-courant"
+    if(compte.type == "CE") {
+      pathSuf = "compte-epargne";
+    }
+    return this.httpClient.put<ICompte>(`${this.API_BASE_URL}/comptes/${pathSuf}/${compte.idCompteBanque}`, compte);
   }
 
 }

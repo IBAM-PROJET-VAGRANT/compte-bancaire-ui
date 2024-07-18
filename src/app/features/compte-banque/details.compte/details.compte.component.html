@@ -1,1 +1,130 @@
-<p>details.compte works!</p>
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h2>Historique du compte</h2>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="compteForm" (ngSubmit)="handleSearchCompte()">
+            <div class="input-group">
+              <label class="input-group-text">N° compte :</label>
+              <input type="text" formControlName="numero" class="form-control">
+              <button class="btn btn-info">
+                <i class="bi bi-search"></i>
+                Rechercher
+              </button>
+            </div>
+          </form>
+          <ng-template #errorTemplate>
+            <ng-container *ngIf="errorMsg ; else loading">
+              <div class="text-danger">{{ errorMsg }}</div>
+            </ng-container>
+            <ng-template #loading>
+              Chargement ...
+            </ng-template>
+          </ng-template>
+          <ng-container *ngIf="historique | async as details">
+            <div class="mb-2">
+              <label>N° compte :</label>
+              <label><strong>{{ details.numeroCompte }}</strong></label>
+            </div>
+            <div class="mb-2">
+              <label>Solde :</label>
+              <label><strong>{{ details.solde | number : '1.2-2' }}</strong></label>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-sm table-stripped table-hover">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Montant</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let op of details.operationCompteDTO; let idx=index;">
+                  <td>{{ idx +1 }}</td>
+                  <td>{{ op.dateOperation | date : 'dd-MM-yyyy:HH-mm-ss' }}</td>
+                  <td>{{ op.type}}</td>
+                  <td class="text-end">{{ op.montant | number : '1.2-2' }}</td>
+                </tr>
+                </tbody>
+              </table>
+              <ul class="nav nav-pills">
+                <li *ngFor="let item of [].constructor(details.totalPages);let page=index">
+                  <a [ngClass]="page==currentPage?'btn-info':'btn-outline-info'" (click)="gotoPage(page)" class="btn  ms-1 mt-1">{{page == 0 ? 1 : page }}</a>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <form [formGroup]="operationForm" (ngSubmit)="handleOperationSubmit()">
+        <div class="card">
+          <div class="card-header bg-info">
+            <h2>Nouvelle opération</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 mt-2">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="type" value="CREDIT" (change)="checkType()">
+                  <label class="form-check-label">Dépot</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="type" value="DEBIT" (change)="checkType()">
+                  <label class="form-check-label">Retrait</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="type" value="TRANSFER" (change)="checkType()">
+                  <label class="form-check-label">Virement</label>
+                </div>
+                <span class="text-danger"
+                      *ngIf="operationForm.controls['type'].touched
+                      && operationForm.controls['type'].errors
+                      && operationForm.controls['type'].errors!['required']">
+                    Le type d'opération est obligatoire.
+                </span>
+              </div>
+              <div class="col-12 mt-2">
+                <label for="montant">Montant :</label>
+                <input class="form-control" type="text" id="montant" name="montant" formControlName="montant" placeholder="Saisir le montant ici">
+                <span class="text-danger"
+                      *ngIf="operationForm.controls['montant'].touched
+                      && operationForm.controls['montant'].errors
+                      && operationForm.controls['montant'].errors!['required']">
+                  Le montant de l'opération est obligatoire.
+                </span>
+              </div>
+              <div class="col-12 mt-2" *ngIf="operationForm.value.type == 'TRANSFER'">
+                <label for="compteDestination">N° compte destination</label>
+                <input type="text" name="compteDestination" id="compteDestination" class="form-control" formControlName="compteDestination" placeholder="Saisir le numéro compte destination ici">
+                <span class="text-danger"
+                      *ngIf="operationForm.value.type == 'TRANSFER'
+                      && operationForm.controls['compteDestination'].touched
+                      && operationForm.controls['compteDestination'].errors
+                      && operationForm.controls['compteDestination'].errors!['required']">
+                  Le N° du compte de destination est obligatoire.
+                </span>
+              </div>
+              <div class="col-12 mt-2">
+                <label for="description">Description :</label>
+                <textarea name="description" id="description" rows="3" class="form-control" formControlName="description"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="float-end">
+              <button class="btn btn-warning btn-sm me-2" (click)="resetForm()"><i class="bi bi-ban"></i> Annuler</button>
+              <button class="btn btn-success btn-sm me-2" [disabled]="operationForm.invalid"><i class="bi bi-floppy"></i> Enregistrer</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

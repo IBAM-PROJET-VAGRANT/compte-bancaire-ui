@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -6,6 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-
-  onLogout(): void {}
+constructor(private router: Router) {
+}
+  onLogout(): void {
+    this.router.navigate(["login"])
+  }
 }

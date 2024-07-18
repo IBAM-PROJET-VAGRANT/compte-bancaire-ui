@@ -34,7 +34,7 @@ export class ListeComptesComponent implements OnInit {
   }
 
   onEditCompte(compte: ICompte) {
-    this.router.navigate(["admin", "comptes", compte.idCompteBanque, "modifie"], {state: compte})
+    this.router.navigate(["admin", "comptes", compte.idCompteBanque, "modifie"], {state: compte.clientDTO})
   }
 
   // onConfirmDelete(id: number | undefined): void {

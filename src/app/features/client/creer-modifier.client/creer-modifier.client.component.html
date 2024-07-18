@@ -1,1 +1,57 @@
-<p>creer-modifier.client works!</p>
+<form [formGroup]="clientForm" (ngSubmit)="handleClientFormSubmit()">
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2>Enregistrement d'un client</h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 col-md-6 mt-2">
+          <label for="nom">Nom :</label>
+          <input class="form-control" type="text" id="nom" name="nom" formControlName="nom" placeholder="Saisir le nom ici">
+          <span class="text-danger"
+                *ngIf="clientForm.controls['nom'].touched
+                && clientForm.controls['nom'].errors
+                && clientForm.controls['nom'].errors!['required']">
+            Le nom est obligatoire.
+          </span>
+        </div>
+        <div class="col-12 col-md-6 mt-2">
+          <label for="prenom">Prénom :</label>
+          <input class="form-control" type="text" id="prenom" name="prenom" formControlName="prenom" placeholder="Saisir le prénom ici">
+          <span class="text-danger"
+                *ngIf="clientForm.controls['prenom'].touched
+                && clientForm.controls['prenom'].errors
+                && clientForm.controls['prenom'].errors!['required']">
+            Le prénom est obligatoire.
+          </span>
+        </div>
+        <div class="col-12 col-md-6 mt-2">
+          <label for="telephone">N° de téléphone :</label>
+          <input class="form-control" type="text" id="telephone" name="telephone" formControlName="telephone" placeholder="Saisir le numéro de téléphone ici">
+          <span class="text-danger"
+                *ngIf="clientForm.controls['telephone'].touched
+                && clientForm.controls['telephone'].errors
+                && clientForm.controls['telephone'].errors!['required']">
+            Le N° de téléphone est obligatoire.
+          </span>
+        </div>
+        <div class="col-12 col-md-6 mt-2">
+          <label for="email">Adresse email :</label>
+          <input class="form-control" type="text" id="email" name="email" formControlName="email" placeholder="Saisir email ici">
+          <span class="text-danger"
+                *ngIf="clientForm.controls['email'].touched
+                && clientForm.controls['email'].errors
+                && clientForm.controls['email'].errors!['email']">
+            L'adresse email est invalide.
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="float-end">
+        <button class="btn btn-warning btn-sm me-2" (click)="resetForm()"><i class="bi bi-ban"></i> Annuler</button>
+        <button class="btn btn-success btn-sm me-2" [disabled]="clientForm.invalid"><i class="bi bi-floppy"></i> Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</form>

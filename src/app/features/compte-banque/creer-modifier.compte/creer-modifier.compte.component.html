@@ -1,1 +1,61 @@
-<p>creer-modifier.compte works!</p>
+<form [formGroup]="compteForm" (ngSubmit)="handleCompteFormSubmit()">
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2>Création de compte pour le client : {{ getFullName() }}</h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 mt-2">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="type" value="CC" (change)="checkType()">
+            <label class="form-check-label">Compte courant</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="type" value="CE" (change)="checkType()">
+            <label class="form-check-label">Compte d'epargne</label>
+          </div>
+          <span class="text-danger"
+                *ngIf="compteForm.controls['type'].touched
+                && compteForm.controls['type'].errors
+                && compteForm.controls['type'].errors!['required']">
+            Le type de compte est obligatoire.
+          </span>
+        </div>
+        <div class="col-12 mt-2">
+          <label for="numero">N° de compte :</label>
+          <input class="form-control" type="text" id="numero" name="numero" formControlName="numero" placeholder="Saisir le numéro de compte ici">
+          <span class="text-danger"
+                *ngIf="compteForm.controls['numero'].touched
+                && compteForm.controls['numero'].errors
+                && compteForm.controls['numero'].errors!['required']">
+            Le numéro de compte est obligatoire.
+          </span>
+        </div>
+        <div class="col-12 col-md-6 mt-2">
+          <label for="solde">Solde :</label>
+          <input class="form-control" type="text" id="solde" name="solde" formControlName="solde" placeholder="Saisir le solde initial ici">
+          <span class="text-danger"
+                *ngIf="compteForm.controls['solde'].touched
+                && compteForm.controls['solde'].errors
+                && compteForm.controls['solde'].errors!['required']">
+            Le solde initial est obligatoire.
+          </span>
+        </div>
+        <div class="col-12 col-md-6 mt-2" *ngIf="compteForm.value.type == 'CC'">
+          <label for="decouvert">Découvert :</label>
+          <input class="form-control" type="text" id="decouvert" name="decouvert" formControlName="decouvert" placeholder="Saisir le découvert ici">
+        </div>
+        <div class="col-12 col-md-6 mt-2" *ngIf="compteForm.value.type == 'CE'">
+          <label for="tauxInteret">Taux d'intérêt (%) :</label>
+          <input class="form-control" type="text" id="tauxInteret" name="tauxInteret" formControlName="tauxInteret" placeholder="Saisir taux d'intérêt ici">
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="float-end">
+        <button class="btn btn-warning btn-sm me-2" (click)="resetForm()"><i class="bi bi-ban"></i> Annuler</button>
+        <button class="btn btn-success btn-sm me-2" [disabled]="compteForm.invalid"><i class="bi bi-floppy"></i> Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</form>

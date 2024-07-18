@@ -5,6 +5,7 @@ import { LayoutRoutingModule } from './layout-routing.module';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
+import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { HeaderComponent } from './header/header.component';
   ],
   imports: [
     CommonModule,
-    LayoutRoutingModule
+    LayoutRoutingModule,
+    SweetAlert2Module
   ]
 })
 export class LayoutModule { }

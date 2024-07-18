@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientService } from '../../../services/client.service';
 import { IClient } from '../../../models/client.model';
-import { catchError, Observable, throwError } from 'rxjs';
+import {catchError, map, Observable, throwError} from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import Swal from 'sweetalert2';
+import {IApiResponse} from "../../../models/api-response.model";
 
 @Component({
   selector: 'app-liste.clients',
@@ -28,24 +30,40 @@ export class ListeClientsComponent implements OnInit {
     });
     this.loadAll();
   }
-
   onShowCompteForm(client: IClient) {
     this.router.navigate(["admin","comptes", "client", client.idClient], {state: client});
   }
-
   onEditClient(client: IClient) {
     this.router.navigate(["admin", "clients", client.idClient, "modifie"], {state: client})
   }
-
-  onConfirmDelete(id: number | undefined): void {
-    this.delete(id);
+  onConfirmDelete(client: IClient): void {
+    Swal.fire({
+      title: "Etes-vous sûr?",
+      text: "Cette action est irréversible!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, Supprimer!",
+      cancelButtonText: "Annuler!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.delete(client);
+      }
+    });
   }
-
-  delete(id: number | undefined): void {
-    if (id) {
-      this.clientService.delete(id).subscribe({
-        next: (res: any) => {
-          this.loadAll();
+  delete(client: IClient): void {
+    if (client.idClient) {
+      this.clientService.delete(client.idClient).subscribe({
+        next: (res: IApiResponse) => {
+          console.log("DELETE_RESPONSE ", res);
+          this.clients=this.clients.pipe(
+            map(data=>{
+              let index=data.indexOf(client);
+              data.slice(index,1);
+              return data;
+            })
+          );
         },
         error: (e: any) => {
           console.log("_________________DELETE_ERROR ", e);

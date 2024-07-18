@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IClient } from '../models/client.model';
+import {IApiResponse} from "../models/api-response.model";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class ClientService {
     return this.httpClient.put<IClient>(`${this.API_BASE_URL}/clients/${client.idClient}`, client);
   }
 
-  delete(id: number): Observable<any> {
-    return this.httpClient.delete<any>(`${this.API_BASE_URL}/clients/${id}`);
+  delete(id: number): Observable<IApiResponse> {
+    return this.httpClient.delete<IApiResponse>(`${this.API_BASE_URL}/clients/${id}`);
   }
 }
