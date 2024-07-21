@@ -5,12 +5,14 @@ import {Observable} from "rxjs";
 import {IRetrait} from "../models/retrait.model";
 import {IVirement} from "../models/virement.model";
 import {IHistorique} from "../models/historique-compte.model";
+import {API_BASE_URL} from "../shared/app.constant";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OperationService {
-  API_BASE_URL = "http://localhost:8082/api/v1"
+  // API_BASE_URL = "http://192.168.50.22:8082/api/v1"
+  API_BASE_URL = API_BASE_URL;
 
   constructor(private httpClient: HttpClient) { }
 
